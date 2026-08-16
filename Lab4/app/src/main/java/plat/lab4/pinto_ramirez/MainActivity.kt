@@ -97,7 +97,7 @@ fun UiPrincipal(modifier: Modifier = Modifier) {
             ) {
                 Column { Text(text = "Integrantes", fontWeight = FontWeight.Bold) }
                 Spacer(modifier = Modifier.width(50.dp))
-                Column { Text("Jose Pinto\nCristian Ronaldo\nLionel Pessi") }
+                Column { Text("Jose Pinto\nMatthew Castellanos\nIan Castellanos") }
             }
 
             Spacer(modifier = Modifier.height(16.dp))
