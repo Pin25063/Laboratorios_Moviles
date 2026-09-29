@@ -34,6 +34,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import kotlinx.serialization.Serializable
+import plat.pinto_ramirez.lab7.AppNavHost.BottomBar
 import plat.pinto_ramirez.lab7.CharacterDb
 
 @Serializable
@@ -46,7 +47,11 @@ data class CharacterDetailDestination(val id: Int)
 @Composable
 fun CharacterScreen(
     onCharacterClick: (Int) -> Unit,
-    modifier: Modifier = Modifier) {
+    modifier: Modifier = Modifier,
+    onCharactersClick:() -> Unit,
+    onLocationsClick: () -> Unit,
+    onProfileClick: () -> Unit
+    ) {
 
     val db = remember { CharacterDb() }
     val characterList = remember { db.getAllCharacters() }
@@ -60,6 +65,16 @@ fun CharacterScreen(
                     containerColor = MaterialTheme.colorScheme.primary,
                     titleContentColor = MaterialTheme.colorScheme.onPrimary,
                 )
+            )
+        },
+        bottomBar = {
+            BottomBar(
+                characters = true,
+                locations = false,
+                profile = false,
+                onCharactersClick = onCharactersClick,
+                onLocationsClick = onLocationsClick,
+                onProfileClick = onProfileClick
             )
         }
     ) { innerPadding ->
@@ -94,6 +109,9 @@ fun CharacterScreen(
 @Composable
 fun CharacterDetailScreen(characterId: Int,
                           onBackClick: () -> Unit,
+                          onCharactersClick: () -> Unit,
+                          onLocationsClick: () -> Unit,
+                          onProfileClick: () -> Unit,
                           modifier: Modifier = Modifier) {
     val db = remember { CharacterDb() }
     val character = remember(characterId) { db.getCharacterById(characterId) }
@@ -116,6 +134,16 @@ fun CharacterDetailScreen(characterId: Int,
                     titleContentColor = MaterialTheme.colorScheme.onPrimary,
                     navigationIconContentColor = MaterialTheme.colorScheme.onPrimary
                 )
+            )
+        },
+        bottomBar = {
+            BottomBar(
+                characters = true,
+                locations = false,
+                profile = false,
+                onCharactersClick = onCharactersClick,
+                onLocationsClick = onLocationsClick,
+                onProfileClick = onProfileClick
             )
         }
     ) { innerPadding ->
