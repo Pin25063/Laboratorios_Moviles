@@ -12,18 +12,21 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import kotlinx.serialization.Serializable
-import plat.pinto_ramirez.lab7.character.CharacterDetailDestination
-import plat.pinto_ramirez.lab7.character.CharactersDestination
-import plat.pinto_ramirez.lab7.character.CharacterDetailScreen
-import plat.pinto_ramirez.lab7.character.CharacterScreen
+import plat.pinto_ramirez.lab7.character.details.CharacterDetailScreen
+import plat.pinto_ramirez.lab7.character.details.CharacterDetailsViewModel
+import plat.pinto_ramirez.lab7.character.list.CharacterListViewModel
+import plat.pinto_ramirez.lab7.character.list.CharacterScreen
 import plat.pinto_ramirez.lab7.location.LocationDetailDestination
 import plat.pinto_ramirez.lab7.location.LocationDetailScreen
 import plat.pinto_ramirez.lab7.location.LocationsDestination
@@ -35,6 +38,12 @@ import plat.pinto_ramirez.lab7.profile.ProfileScreen
 
 @Serializable
 object CharactersGraph
+
+@Serializable
+data object CharactersDestination
+
+@Serializable
+data class CharacterDetailDestination(val id: Int)
 
 @Serializable
 object LocationsGraph
@@ -63,11 +72,15 @@ fun AppNavHost(modifier: Modifier = Modifier) {
             startDestination = CharactersDestination
         ){
             composable<CharactersDestination>{
+                val viewModel = viewModel<CharacterListViewModel>()
+                val state by viewModel.state.collectAsState()
+
                 CharacterScreen(
+                    state = state,
+                    onEvent = { event -> viewModel.OnEvent(event) },
                     modifier = Modifier.fillMaxSize(),
                     onCharacterClick = { characterId ->
-                        navController.navigate(CharacterDetailDestination(id = characterId)) {
-                        }
+                        navController.navigate(CharacterDetailDestination(id = characterId))
                     },
                     onCharactersClick = { },
                     onLocationsClick = { navController.navigate(LocationsGraph) },
@@ -77,9 +90,13 @@ fun AppNavHost(modifier: Modifier = Modifier) {
 
             composable<CharacterDetailDestination> { backStackEntry ->
                 val destination = backStackEntry.toRoute<CharacterDetailDestination>()
+                val viewModel = viewModel<CharacterDetailsViewModel>()
+                val state by viewModel.state.collectAsState()
 
                 CharacterDetailScreen(
                     characterId = destination.id,
+                    state = state,
+                    onEvent = { event -> viewModel.OnEvent(event) },
                     onBackClick = { navController.popBackStack() },
                     modifier = Modifier.fillMaxSize(),
                     onCharactersClick = { },
