@@ -27,10 +27,10 @@ import plat.pinto_ramirez.lab7.character.details.CharacterDetailScreen
 import plat.pinto_ramirez.lab7.character.details.CharacterDetailsViewModel
 import plat.pinto_ramirez.lab7.character.list.CharacterListViewModel
 import plat.pinto_ramirez.lab7.character.list.CharacterScreen
-import plat.pinto_ramirez.lab7.location.LocationDetailDestination
-import plat.pinto_ramirez.lab7.location.LocationDetailScreen
-import plat.pinto_ramirez.lab7.location.LocationsDestination
-import plat.pinto_ramirez.lab7.location.LocationsScreen
+import plat.pinto_ramirez.lab7.location.details.LocationDetailScreen
+import plat.pinto_ramirez.lab7.location.details.LocationDetailsViewModel
+import plat.pinto_ramirez.lab7.location.list.LocationListViewModel
+import plat.pinto_ramirez.lab7.location.list.LocationsScreen
 import plat.pinto_ramirez.lab7.login.LoginDestination
 import plat.pinto_ramirez.lab7.login.LoginScreen
 import plat.pinto_ramirez.lab7.profile.ProfileDestination
@@ -47,6 +47,12 @@ data class CharacterDetailDestination(val id: Int)
 
 @Serializable
 object LocationsGraph
+
+@Serializable
+data object LocationsDestination
+
+@Serializable
+data class LocationDetailDestination(val id: Int)
 
 @Composable
 fun AppNavHost(modifier: Modifier = Modifier) {
@@ -94,7 +100,6 @@ fun AppNavHost(modifier: Modifier = Modifier) {
                 val state by viewModel.state.collectAsState()
 
                 CharacterDetailScreen(
-                    characterId = destination.id,
                     state = state,
                     onEvent = { event -> viewModel.OnEvent(event) },
                     onBackClick = { navController.popBackStack() },
@@ -110,22 +115,31 @@ fun AppNavHost(modifier: Modifier = Modifier) {
             startDestination = LocationsDestination
         ){
             composable<LocationsDestination>{
+                val viewModel = viewModel<LocationListViewModel>()
+                val state by viewModel.state.collectAsState()
+
                 LocationsScreen(
+                    state = state,
+                    onEvent = { event -> viewModel.onEvent(event) },
                     onLocationClick = { locationId ->
                         navController.navigate(LocationDetailDestination(id = locationId))
                     },
                     onCharactersClick = { navController.navigate(CharactersGraph) },
                     onLocationsClick = { },
                     onProfileClick = { navController.navigate(ProfileDestination) },
-                    modifier = Modifier
+                    modifier = Modifier.fillMaxSize()
                 )
             }
 
             composable<LocationDetailDestination> { backStackEntry ->
                 val destination = backStackEntry.toRoute<LocationDetailDestination>()
 
+                val viewModel = viewModel<LocationDetailsViewModel>()
+                val state by viewModel.state.collectAsState()
+
                 LocationDetailScreen(
-                    locationId = destination.id,
+                    state = state,
+                    onEvent = { event -> viewModel.onEvent(event) },
                     onBackClick = { navController.popBackStack() },
                     onCharactersClick = { navController.navigate(CharactersGraph) },
                     onLocationsClick = { },
@@ -169,7 +183,6 @@ fun BottomBar(
         containerColor = MaterialTheme.colorScheme.primary,
         contentColor = MaterialTheme.colorScheme.onPrimary
     ) {
-        // Pestaña Characters
         NavigationBarItem(
             selected = characters,
             onClick = onCharactersClick,
@@ -189,7 +202,6 @@ fun BottomBar(
             colors = itemColors
         )
 
-        // Pestaña Locations
         NavigationBarItem(
             selected = locations,
             onClick = onLocationsClick,
@@ -209,7 +221,6 @@ fun BottomBar(
             colors = itemColors
         )
 
-        // Pestaña Profile
         NavigationBarItem(
             selected = profile,
             onClick = onProfileClick,

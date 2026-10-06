@@ -96,7 +96,7 @@ fun ProfileScreen(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(
-                    text = "Carné:",
+                    text = "Carne:",
                     textAlign = TextAlign.Justify
                 )
                 Text(
@@ -108,7 +108,7 @@ fun ProfileScreen(
             Button(
                 onClick = onLogOutClick
             ) {
-                Text("Cerrar sesión")
+                Text("Cerrar sesion")
             }
         }
     }

@@ -34,7 +34,6 @@ import plat.pinto_ramirez.lab7.LoadingScreen
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CharacterDetailScreen(
-    characterId: Int,
     state: CharacterDetailsState = CharacterDetailsState(),
     onEvent: (CharacterDetailsEvent) -> Unit = {},
     onBackClick: () -> Unit,
