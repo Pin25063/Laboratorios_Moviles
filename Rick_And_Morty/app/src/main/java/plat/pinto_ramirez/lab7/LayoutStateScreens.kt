@@ -56,7 +56,7 @@ fun ErrorScreen(
         )
         Spacer(modifier = Modifier.height(16.dp))
         Text(
-            text = "Error al obtener listado de personajes.\nIntenta de nuevo",
+            text = "Ha ocurrido un error.\nIntenta de nuevo",
             color = Color.Red,
             textAlign = TextAlign.Center
         )

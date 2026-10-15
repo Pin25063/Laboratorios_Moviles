@@ -33,8 +33,10 @@ import plat.pinto_ramirez.lab7.location.list.LocationListViewModel
 import plat.pinto_ramirez.lab7.location.list.LocationsScreen
 import plat.pinto_ramirez.lab7.login.LoginDestination
 import plat.pinto_ramirez.lab7.login.LoginScreen
+import plat.pinto_ramirez.lab7.login.LoginViewModel
 import plat.pinto_ramirez.lab7.profile.ProfileDestination
 import plat.pinto_ramirez.lab7.profile.ProfileScreen
+import plat.pinto_ramirez.lab7.profile.ProfileViewModel
 
 @Serializable
 object CharactersGraph
@@ -64,10 +66,12 @@ fun AppNavHost(modifier: Modifier = Modifier) {
         modifier = modifier
     ) {
         composable<LoginDestination>{
+            val viewModel = viewModel<LoginViewModel>()
             LoginScreen(
+                viewModel = viewModel,
                 modifier = Modifier,
                 onNavigateToCharacters = {
-                    navController.navigate(CharactersGraph){
+                    navController.navigate(CharactersGraph) {
                         popUpTo<LoginDestination> { inclusive = true }
                     }
                 }
@@ -149,7 +153,9 @@ fun AppNavHost(modifier: Modifier = Modifier) {
         }
 
         composable<ProfileDestination>{
+            val viewModel = viewModel<ProfileViewModel>()
             ProfileScreen(
+                viewModel = viewModel,
                 onCharactersClick = { navController.navigate(CharactersGraph) },
                 onLocationsClick = { navController.navigate(LocationsGraph) },
                 onProfileClick = { },
