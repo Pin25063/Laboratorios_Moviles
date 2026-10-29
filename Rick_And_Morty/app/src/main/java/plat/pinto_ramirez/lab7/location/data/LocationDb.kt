@@ -1,3 +1,7 @@
+package plat.pinto_ramirez.lab7.location.data
+
+import Location
+
 class LocationDb {
     private val locations: List<Location> = listOf(
         Location(1, "Earth (C-137)", "Planet", "Dimension C-137"),

@@ -1,6 +1,5 @@
 package plat.pinto_ramirez.lab7.location.details
 
-import LocationDb
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -20,7 +19,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
@@ -28,7 +26,6 @@ import androidx.compose.ui.unit.dp
 import plat.pinto_ramirez.lab7.AppNavHost.BottomBar
 import plat.pinto_ramirez.lab7.ErrorScreen
 import plat.pinto_ramirez.lab7.LoadingScreen
-import plat.pinto_ramirez.lab7.character.details.CharacterDetailsEvent
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

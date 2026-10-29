@@ -13,6 +13,7 @@ import plat.pinto_ramirez.lab7.AppNavHost.AppNavHost
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        DatabaseProvider.init(this)
         enableEdgeToEdge()
         setContent {
             Lab7Theme {

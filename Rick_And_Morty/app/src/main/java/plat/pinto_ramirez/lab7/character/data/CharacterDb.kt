@@ -1,4 +1,6 @@
-package plat.pinto_ramirez.lab7
+package plat.pinto_ramirez.lab7.character.data
+
+import plat.pinto_ramirez.lab7.Character
 
 class CharacterDb {
     private val characters: List<Character> = listOf(

@@ -20,7 +20,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
@@ -28,7 +27,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import plat.pinto_ramirez.lab7.AppNavHost.BottomBar
-import plat.pinto_ramirez.lab7.CharacterDb
 import plat.pinto_ramirez.lab7.ErrorScreen
 import plat.pinto_ramirez.lab7.LoadingScreen
 

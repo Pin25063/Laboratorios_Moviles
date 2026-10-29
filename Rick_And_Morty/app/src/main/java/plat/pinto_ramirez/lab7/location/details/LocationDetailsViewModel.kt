@@ -1,6 +1,6 @@
 package plat.pinto_ramirez.lab7.location.details
 
-import LocationDb
+import plat.pinto_ramirez.lab7.location.data.LocationDb
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

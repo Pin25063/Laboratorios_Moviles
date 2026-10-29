@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import plat.pinto_ramirez.lab7.CharacterDb
+import plat.pinto_ramirez.lab7.character.data.CharacterDb
 
 class CharacterListViewModel : ViewModel(){
     val db = CharacterDb()
