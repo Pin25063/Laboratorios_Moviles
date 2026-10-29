@@ -11,6 +11,9 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FilterList
+import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -30,6 +33,7 @@ import coil.compose.AsyncImage
 import plat.pinto_ramirez.lab7.AppNavHost.BottomBar
 import plat.pinto_ramirez.lab7.ErrorScreen
 import plat.pinto_ramirez.lab7.LoadingScreen
+import plat.pinto_ramirez.lab7.character.list.CharacterListEvent
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -61,7 +65,20 @@ fun CharacterDetailScreen(
                     containerColor = MaterialTheme.colorScheme.primary,
                     titleContentColor = MaterialTheme.colorScheme.onPrimary,
                     navigationIconContentColor = MaterialTheme.colorScheme.onPrimary
-                )
+                ),
+                actions = {
+                    IconButton(onClick = { onEvent(CharacterDetailsEvent.onFavoriteClick(character?.isFavorite
+                        ?: false)) }) {
+                        Icon(
+                            imageVector = if (character?.isFavorite == true) {
+                                Icons.Default.Favorite
+                            } else {
+                                Icons.Outlined.FavoriteBorder
+                            },
+                            contentDescription = "Favorito"
+                        )
+                    }
+                }
             )
         },
         bottomBar = {

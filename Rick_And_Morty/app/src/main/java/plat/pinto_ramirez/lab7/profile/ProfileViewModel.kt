@@ -7,10 +7,12 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import plat.pinto_ramirez.lab7.DatabaseProvider
 import plat.pinto_ramirez.lab7.UserStore
 
 class ProfileViewModel(application: Application) : AndroidViewModel(application) {
     private val userStore = UserStore(application)
+    private val db = DatabaseProvider.db
 
     val userName: StateFlow<String> = userStore.getUserName.stateIn(
         scope = viewModelScope,
@@ -21,6 +23,8 @@ class ProfileViewModel(application: Application) : AndroidViewModel(application)
     fun logout(onLogoutSuccess: () -> Unit) {
         viewModelScope.launch {
             userStore.clearUserName()
+            db.characterDao().deleteAll()
+            db.locationDao().deleteAll()
             onLogoutSuccess()
         }
     }
