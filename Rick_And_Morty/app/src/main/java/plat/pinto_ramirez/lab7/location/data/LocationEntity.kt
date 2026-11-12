@@ -9,13 +9,14 @@ data class LocationEntity(
     @PrimaryKey val id: Int,
     val name: String,
     val type: String,
-    val dimension: String
+    val dimension: String,
+    val isFavorite: Boolean = false
 )
 
 fun LocationEntity.toModel(): Location {
-    return Location(id, name, type, dimension)
+    return Location(id, name, type, dimension, isFavorite)
 }
 
 fun Location.toEntity(): LocationEntity {
-    return LocationEntity(id, name, type, dimension)
+    return LocationEntity(id, name, type, dimension, isFavorite)
 }

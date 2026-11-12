@@ -6,46 +6,73 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import plat.pinto_ramirez.lab7.DatabaseProvider
-import plat.pinto_ramirez.lab7.location.data.toModel
+import Location
+import plat.pinto_ramirez.lab7.RepositoryProvider
+import plat.pinto_ramirez.lab7.location.data.LocationRepository
 
-class LocationListViewModel : ViewModel() {
-
-    private val db = DatabaseProvider.db
+class LocationListViewModel(
+    private val repository: LocationRepository = RepositoryProvider.locationRepository
+) : ViewModel() {
 
     private val _state = MutableStateFlow(LocationListState(isLoading = true))
     val state: StateFlow<LocationListState> = _state.asStateFlow()
+
+    private var allLocations: List<Location> = emptyList()
 
     init {
         loadLocations()
     }
 
     fun loadLocations() {
-        _state.value = LocationListState(isLoading = true)
+        _state.value = _state.value.copy(isLoading = true)
         viewModelScope.launch {
-            val entities = db.locationDao().getAllLocations()
-
-            val models = entities.map { it.toModel() }
-
-            _state.value = LocationListState(
-                isLoading = false,
-                locations = models
-            )
+            try {
+                allLocations = repository.getLocations()
+                applyFilter(_state.value.selectedFilter)
+            } catch (e: Exception) {
+                _state.value = _state.value.copy(
+                    isLoading = false,
+                    hasError = true
+                )
+            }
         }
+    }
+
+    private fun applyFilter(filter: LocationFilter) {
+        val filtered = when (filter) {
+            LocationFilter.ALL -> allLocations
+            LocationFilter.FAVORITES -> allLocations.filter { it.isFavorite }
+            LocationFilter.NON_FAVORITES -> allLocations.filter { !it.isFavorite }
+        }
+        _state.value = _state.value.copy(
+            isLoading = false,
+            hasError = false,
+            locations = filtered,
+            selectedFilter = filter
+        )
     }
 
     fun onEvent(event: LocationListEvents) {
         when (event) {
-            is LocationListEvents.onLocationClick -> {
-            }
+            is LocationListEvents.onLocationClick -> {}
             LocationListEvents.onLoadingLayoutClick -> {
-                _state.value = LocationListState(
+                _state.value = _state.value.copy(
                     isLoading = false,
                     hasError = true
                 )
             }
             LocationListEvents.onRetryClick -> {
                 loadLocations()
+            }
+            is LocationListEvents.onFilterSelected -> {
+                applyFilter(event.filter)
+            }
+            is LocationListEvents.onFavoriteClick -> {
+                viewModelScope.launch {
+                    repository.updateFavoriteStatus(event.locationId, !event.currentStatus)
+                    allLocations = repository.getLocations()
+                    applyFilter(_state.value.selectedFilter)
+                }
             }
         }
     }

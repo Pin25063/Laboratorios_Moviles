@@ -9,16 +9,17 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import plat.pinto_ramirez.lab7.character.data.CharacterDb
-import plat.pinto_ramirez.lab7.DatabaseProvider
+import plat.pinto_ramirez.lab7.RepositoryProvider
 import plat.pinto_ramirez.lab7.UserStore
-import plat.pinto_ramirez.lab7.character.data.toEntity
-import plat.pinto_ramirez.lab7.location.data.LocationDb
-import plat.pinto_ramirez.lab7.location.data.toEntity
+import plat.pinto_ramirez.lab7.character.data.CharacterRepository
+import plat.pinto_ramirez.lab7.location.data.LocationRepository
 
-class LoginViewModel(application: Application) : AndroidViewModel(application) {
+class LoginViewModel(
+    application: Application,
+    private val characterRepository: CharacterRepository = RepositoryProvider.characterRepository,
+    private val locationRepository: LocationRepository = RepositoryProvider.locationRepository
+) : AndroidViewModel(application) {
     private val userStore = UserStore(application)
-    private val db = DatabaseProvider.db // Instancia de tu base de datos Room
 
     private val _userName = MutableStateFlow("")
     val userName: StateFlow<String> = _userName.asStateFlow()
@@ -56,17 +57,14 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
         viewModelScope.launch {
             _isLoading.value = true
 
-            delay(4000)
-
-            val existingCharacters = db.characterDao().getAllCharacters()
-
-            if (existingCharacters.isEmpty()) {
-                val initialCharacters = CharacterDb().getAllCharacters().map { it.toEntity() }
-                val initialLocations = LocationDb().getAllLocations().map { it.toEntity() }
-
-                db.characterDao().insertAll(initialCharacters)
-                db.locationDao().insertAll(initialLocations)
+            try {
+                characterRepository.syncInitialData()
+                locationRepository.syncInitialData()
+            } catch (e: Exception) {
+                e.printStackTrace()
             }
+
+            delay(2000)
 
             if (!isRestoringSession) {
                 userStore.saveUserName(name)

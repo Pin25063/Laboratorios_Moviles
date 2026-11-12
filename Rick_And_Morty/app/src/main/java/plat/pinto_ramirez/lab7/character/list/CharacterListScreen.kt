@@ -6,11 +6,12 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.FilterList
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -34,6 +35,11 @@ fun CharacterScreen(
     onProfileClick: () -> Unit,
 ) {
     val characterList = state.characterList
+    var showCreateDialog by remember { mutableStateOf(false) }
+
+    LaunchedEffect(Unit) {
+        onEvent(CharacterListEvent.onRefresh)
+    }
 
     Scaffold(
         modifier = modifier,
@@ -51,6 +57,15 @@ fun CharacterScreen(
                     actionIconContentColor = MaterialTheme.colorScheme.onPrimary
                 )
             )
+        },
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = { showCreateDialog = true },
+                containerColor = MaterialTheme.colorScheme.primary,
+                contentColor = MaterialTheme.colorScheme.onPrimary
+            ) {
+                Icon(imageVector = Icons.Default.Add, contentDescription = "Crear Personaje")
+            }
         },
         bottomBar = {
             BottomBar(true, false, false, onCharactersClick, onLocationsClick, onProfileClick)
@@ -83,6 +98,74 @@ fun CharacterScreen(
                 }
             }
         }
+    }
+
+    if (showCreateDialog) {
+        var name by remember { mutableStateOf("") }
+        var species by remember { mutableStateOf("") }
+        var status by remember { mutableStateOf("Alive") }
+        var gender by remember { mutableStateOf("Male") }
+
+        AlertDialog(
+            onDismissRequest = { showCreateDialog = false },
+            title = { Text("Crear Personaje") },
+            text = {
+                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    OutlinedTextField(
+                        value = name,
+                        onValueChange = { name = it },
+                        label = { Text("Nombre") },
+                        singleLine = true,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                    OutlinedTextField(
+                        value = species,
+                        onValueChange = { species = it },
+                        label = { Text("Especie") },
+                        singleLine = true,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                    OutlinedTextField(
+                        value = status,
+                        onValueChange = { status = it },
+                        label = { Text("Estado (Alive, Dead, unknown)") },
+                        singleLine = true,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                    OutlinedTextField(
+                        value = gender,
+                        onValueChange = { gender = it },
+                        label = { Text("Género (Male, Female, unknown)") },
+                        singleLine = true,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
+            },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        if (name.isNotBlank()) {
+                            onEvent(
+                                CharacterListEvent.onCreateCharacter(
+                                    name = name.trim(),
+                                    species = species.ifBlank { "Unknown" }.trim(),
+                                    status = status.ifBlank { "unknown" }.trim(),
+                                    gender = gender.ifBlank { "unknown" }.trim()
+                                )
+                            )
+                            showCreateDialog = false
+                        }
+                    }
+                ) {
+                    Text("Crear")
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showCreateDialog = false }) {
+                    Text("Cancelar")
+                }
+            }
+        )
     }
 }
 

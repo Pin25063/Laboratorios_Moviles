@@ -9,14 +9,13 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import plat.pinto_ramirez.lab7.AppNavHost.LocationDetailDestination
-import plat.pinto_ramirez.lab7.DatabaseProvider
-import plat.pinto_ramirez.lab7.location.data.toModel
+import plat.pinto_ramirez.lab7.RepositoryProvider
+import plat.pinto_ramirez.lab7.location.data.LocationRepository
 
 class LocationDetailsViewModel(
-    savedStateHandle: SavedStateHandle
+    savedStateHandle: SavedStateHandle,
+    private val repository: LocationRepository = RepositoryProvider.locationRepository
 ) : ViewModel() {
-
-    private val db = DatabaseProvider.db
 
     private val _state = MutableStateFlow(LocationDetailsState(isLoading = true))
     val state: StateFlow<LocationDetailsState> = _state.asStateFlow()
@@ -30,12 +29,11 @@ class LocationDetailsViewModel(
     fun loadLocation() {
         _state.value = LocationDetailsState(isLoading = true)
         viewModelScope.launch {
-            val entity = db.locationDao().getLocationById(locationId)
-
-            if (entity != null) {
+            val location = repository.getLocationById(locationId)
+            if (location != null) {
                 _state.value = LocationDetailsState(
                     isLoading = false,
-                    location = entity.toModel()
+                    location = location
                 )
             } else {
                 _state.value = LocationDetailsState(

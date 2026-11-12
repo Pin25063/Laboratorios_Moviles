@@ -9,7 +9,7 @@ import plat.pinto_ramirez.lab7.location.data.LocationEntity
 
 @Database(
     entities = [CharacterEntity::class, LocationEntity::class],
-    version = 1
+    version = 2
 )
 abstract class AppDatabase : RoomDatabase() {
     abstract fun characterDao(): CharacterDao
