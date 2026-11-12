@@ -10,7 +10,7 @@ import plat.pinto_ramirez.lab7.Character
 import plat.pinto_ramirez.lab7.RepositoryProvider
 import plat.pinto_ramirez.lab7.character.data.CharacterRepository
 
-class CharacterListViewModel(
+class CharacterListViewModel @JvmOverloads constructor(
     private val repository: CharacterRepository = RepositoryProvider.characterRepository
 ) : ViewModel() {
 

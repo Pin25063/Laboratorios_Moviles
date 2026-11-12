@@ -12,7 +12,7 @@ import plat.pinto_ramirez.lab7.AppNavHost.CharacterDetailDestination
 import plat.pinto_ramirez.lab7.RepositoryProvider
 import plat.pinto_ramirez.lab7.character.data.CharacterRepository
 
-class CharacterDetailsViewModel(
+class CharacterDetailsViewModel @JvmOverloads constructor(
     savedStateHandle: SavedStateHandle,
     private val repository: CharacterRepository = RepositoryProvider.characterRepository
 ) : ViewModel() {

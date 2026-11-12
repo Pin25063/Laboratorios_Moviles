@@ -14,7 +14,7 @@ import plat.pinto_ramirez.lab7.UserStore
 import plat.pinto_ramirez.lab7.character.data.CharacterRepository
 import plat.pinto_ramirez.lab7.location.data.LocationRepository
 
-class LoginViewModel(
+class LoginViewModel @JvmOverloads constructor(
     application: Application,
     private val characterRepository: CharacterRepository = RepositoryProvider.characterRepository,
     private val locationRepository: LocationRepository = RepositoryProvider.locationRepository

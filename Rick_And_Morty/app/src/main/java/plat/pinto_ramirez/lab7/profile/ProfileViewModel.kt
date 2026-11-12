@@ -12,7 +12,7 @@ import plat.pinto_ramirez.lab7.UserStore
 
 class ProfileViewModel(application: Application) : AndroidViewModel(application) {
     private val userStore = UserStore(application)
-    private val db = DatabaseProvider.db
+    private val db by lazy { DatabaseProvider.db }
 
     val userName: StateFlow<String> = userStore.getUserName.stateIn(
         scope = viewModelScope,

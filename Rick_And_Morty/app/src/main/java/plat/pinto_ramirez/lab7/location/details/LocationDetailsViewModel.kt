@@ -12,7 +12,7 @@ import plat.pinto_ramirez.lab7.AppNavHost.LocationDetailDestination
 import plat.pinto_ramirez.lab7.RepositoryProvider
 import plat.pinto_ramirez.lab7.location.data.LocationRepository
 
-class LocationDetailsViewModel(
+class LocationDetailsViewModel @JvmOverloads constructor(
     savedStateHandle: SavedStateHandle,
     private val repository: LocationRepository = RepositoryProvider.locationRepository
 ) : ViewModel() {

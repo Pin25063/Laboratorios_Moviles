@@ -10,7 +10,7 @@ import Location
 import plat.pinto_ramirez.lab7.RepositoryProvider
 import plat.pinto_ramirez.lab7.location.data.LocationRepository
 
-class LocationListViewModel(
+class LocationListViewModel @JvmOverloads constructor(
     private val repository: LocationRepository = RepositoryProvider.locationRepository
 ) : ViewModel() {
 
